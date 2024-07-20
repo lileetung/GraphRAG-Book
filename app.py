@@ -1,7 +1,8 @@
 import os
-
 import pandas as pd
 import tiktoken
+import streamlit as st
+import asyncio
 
 from graphrag.query.context_builder.entity_extraction import EntityVectorStoreKey
 from graphrag.query.indexer_adapters import (
@@ -67,9 +68,13 @@ text_unit_df = pd.read_parquet(f"{OUTPUT_DIR}/{TEXT_UNIT_TABLE}.parquet")
 text_units = read_indexer_text_units(text_unit_df)
 
 ################ Model setting ################
-api_key = os.environ["GRAPHRAG_API_KEY"]
-llm_model = os.environ["GRAPHRAG_LLM_MODEL"]
-embedding_model = os.environ["GRAPHRAG_EMBEDDING_MODEL"]
+# api_key = os.environ["GRAPHRAG_API_KEY"]
+# llm_model = os.environ["GRAPHRAG_LLM_MODEL"]
+# embedding_model = os.environ["GRAPHRAG_EMBEDDING_MODEL"]
+
+api_key = st.secrets["GRAPHRAG_API_KEY"]
+llm_model = st.secrets["GRAPHRAG_LLM_MODEL"]
+embedding_model = st.secrets["GRAPHRAG_EMBEDDING_MODEL"]
 
 llm = ChatOpenAI(
     api_key=api_key,
@@ -163,11 +168,8 @@ search_engine = LocalSearch(
 # ################################################################################################
 # Streamlit UI
 # ################################################################################################
-import streamlit as st
-import asyncio
-
-# credentials
-user_credentials_dict = st.secrets["credentials"]
+# import streamlit as st
+# import asyncio
 
 st.title("Software Engineering at Google")
 
